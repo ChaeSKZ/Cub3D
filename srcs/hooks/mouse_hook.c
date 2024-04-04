@@ -6,7 +6,7 @@
 /*   By: jugingas <jugingas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 22:43:43 by jugingas          #+#    #+#             */
-/*   Updated: 2024/04/04 23:44:04 by jugingas         ###   ########.fr       */
+/*   Updated: 2024/04/05 00:11:26 by jugingas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,6 @@ int	mouse_handler(int x, int y, t_cub3D_data *data)
 
 bool	mouse_hook(t_cub3D_data *data)
 {
-	mlx_hook(data->window.address, 4, 0, mouse_handler, data);
+	mlx_hook(data->window.address, 6, 0, mouse_handler, data);
 	return (true);
 }

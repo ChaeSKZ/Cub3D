@@ -6,7 +6,7 @@
 /*   By: jugingas <jugingas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 13:26:52 by jugingas          #+#    #+#             */
-/*   Updated: 2024/03/18 13:55:40 by dlacuey          ###   ########.fr       */
+/*   Updated: 2024/04/04 23:55:08 by jugingas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,26 @@
 #include <stdbool.h>
 #include "libft_and_utils.h"
 #include "parser.h"
+
+bool	check_color(char *line)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (line[i])
+	{
+		if (!is_whitespace(line[i]) && (line[i] > '9' || line[i] < '0') && line[i] != ',')
+			return (false);
+		if (line[i] == ',')
+			count++;
+		i++;
+	}
+	if (count != 2)
+		return (false);
+	return (true);
+}
 
 bool	get_values(char *line, t_color_rgb tab)
 {
@@ -56,6 +76,8 @@ bool	get_ceiling(char **file, t_map_data *data)
 			n++;
 		if (file[i][n] == 'C' && file[i][n + 1] == ' ')
 		{
+			if (!check_color(file[i] + n + 1))
+				return (printf("error: invalid ceiling color values.\n"), false);
 			n += 1;
 			while (file[i][n] && is_whitespace(file[i][n]))
 				n++;
@@ -80,6 +102,8 @@ bool	get_floor(char **file, t_map_data *data)
 			n++;
 		if (file[i][n] == 'F' && file[i][n + 1] == ' ')
 		{
+			if (!check_color(file[i] + n + 1))
+				return (printf("error: invalid floor color values.\n"), false);
 			n += 1;
 			while (file[i][n] && is_whitespace(file[i][n]))
 				n++;

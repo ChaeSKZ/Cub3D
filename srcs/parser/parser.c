@@ -6,7 +6,7 @@
 /*   By: jugingas <jugingas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 13:00:00 by jugingas          #+#    #+#             */
-/*   Updated: 2024/03/18 13:50:43 by dlacuey          ###   ########.fr       */
+/*   Updated: 2024/04/05 00:03:46 by jugingas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@
 #include "cub3d_useful_values.h"
 #include "parser.h"
 #include "minimap.h"
+
+void	free_textures(t_map_data *map_data)
+{
+	free(map_data->north_img);
+	free(map_data->south_img);
+	free(map_data->east_img);
+	free(map_data->west_img);
+}
 
 bool	check_filename_extention(char *filepath)
 {
@@ -71,24 +79,21 @@ void	set_gap(t_map_data *map_data)
 bool	parsing_map(char *filepath, t_map_data *map_data)
 {
 	char	**file;
-	int		return_value;
 
 	if (!check_filename_extention(filepath))
 		return (error_wrong_extention(), false);
 	if (!fill_file(&file, filepath))
 		return (false);
 	if (!get_textures(file, map_data))
-		return_value = false;
+		return (free_file(file), false);
 	else if (!get_colors(file, map_data))
-		return_value = false;
+		return (free_file(file), free_textures(map_data), false);
 	else if (!get_map(file, map_data))
-		return_value = false;
-	else
-		return_value = true;
+		return (free_file(file), free_textures(map_data), false);
 	(free_file(file));
 	set_minimap_colors(map_data);
 	set_gap(map_data);
-	return (return_value);
+	return (true);
 }
 /// if needed uncomment to print the map
 // print_map(map_data->map, map_data->height, map_data->width);
