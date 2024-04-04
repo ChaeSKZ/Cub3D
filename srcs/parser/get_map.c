@@ -6,72 +6,24 @@
 /*   By: jugingas <jugingas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 13:26:40 by jugingas          #+#    #+#             */
-/*   Updated: 2024/03/13 15:55:42 by jugingas         ###   ########.fr       */
+/*   Updated: 2024/03/18 13:56:23 by dlacuey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "stdlib.h"
+#include "stdio.h"
+#include "stdbool.h"
+#include "parser.h"
 
-int	skip_texture_and_colors(char **file)
-{
-	int	i;
-	int	count;
-
-	i = -1;
-	count = 0;
-	while (file[++i])
-	{
-		if (file[i][0] == 'N' && file[i][1] == 'O' && file[i][2] == ' ')
-			count++;
-		else if (file[i][0] == 'S' && file[i][1] == 'O' && file[i][2] == ' ')
-			count++;
-		else if (file[i][0] == 'W' && file[i][1] == 'E' && file[i][2] == ' ')
-			count++;
-		else if (file[i][0] == 'E' && file[i][1] == 'A' && file[i][2] == ' ')
-			count++;
-		else if (file[i][0] == 'F' && file[i][1] == ' ')
-			count++;
-		else if (file[i][0] == 'C' && file[i][1] == ' ')
-			count++;
-		if (count == 6)
-			return (i + 1);
-	}
-	return (false);
-}
-
-bool	is_map_line(char *line)
+t_map_enum	*copy_line(t_map_enum *map, char *line, int width)
 {
 	int	i;
 
 	i = -1;
-	if (!line)
-		return (false);
-	while (line[++i])
-		if (line[i] == '1' || line[i] == '0' || line[i] == 'N'
-			|| line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
-			return (true);
-	return (false);
-}
-
-int	get_map_size(char **map)
-{
-	int	i;
-
-	i = 0;
-	while (map[i] && is_map_line(map[i]))
-		i++;
-	return (i);
-}
-
-t_map_enum	*copy_line(t_map_enum *map, char *line)
-{
-	int	i;
-
-	i = -1;
-	map = malloc(sizeof(t_map_enum) * (ft_strlen(line) - 1));
+	map = malloc(sizeof(t_map_enum) * width);
 	if (!map)
 		return (printf("error: memory allocation failed.\n"), NULL);
-	while (line[++i])
+	while (line[++i] != '\n' && line[i])
 	{
 		if (line[i] == ' ')
 			map[i] = SPACE;
@@ -88,7 +40,7 @@ t_map_enum	*copy_line(t_map_enum *map, char *line)
 		if (line[i] == 'W')
 			map[i] = WEST;
 	}
-	return (map);
+	return (fill_with_spaces(map, i, width));
 }
 
 bool	copy_map(char **map, t_map_data *data)
@@ -112,7 +64,7 @@ bool	copy_map(char **map, t_map_data *data)
 	{
 		if (ft_strlen(map[i]) > data->width)
 			data->width = ft_strlen(map[i]) - 1;
-		data->map[n] = copy_line(data->map[n], map[i]);
+		data->map[n] = copy_line(data->map[n], map[i], data->width);
 		n++;
 		i++;
 	}
@@ -124,6 +76,8 @@ bool	get_map(char **file, t_map_data *data)
 	int	skip;
 
 	skip = skip_texture_and_colors(file);
+	if (!check_map(&file[skip]))
+		return (false);
 	if (!copy_map(&file[skip], data))
 		return (false);
 	return (true);

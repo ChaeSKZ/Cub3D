@@ -3,48 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   create_player.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlacuey <dlacuey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jugingas <jugingas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 07:12:49 by dlacuey           #+#    #+#             */
-/*   Updated: 2024/03/13 11:27:08 by dlacuey          ###   ########.fr       */
+/*   Updated: 2024/03/18 12:24:29 by dlacuey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	set_player_position(t_player *player, t_map_data *map_data)
+void	set_player_size(t_player *player, t_map_data *map_data)
 {
-	int	x;
-	int	y;
-	int	gap;
+	int	two_time_smaller_than_one_block;
 
-	gap = WIDTH / 40;
-	y = 0;
-	while (y < map_data->width)
-	{
-		x = 0;
-		while (x < map_data->height)
-		{
-			if (map_data->map[y][x] == NORTH)
-				break ;
-			x++;
-		}
-		if (map_data->map[y][x] == NORTH)
-			break ;
-		y++;
-	}
-	player->point.pos_x = (x + 1) * gap;
-	player->point.pos_y = (y + 1) * gap;
+	two_time_smaller_than_one_block = map_data->gap / 2;
+	player->size = two_time_smaller_than_one_block;
+}
+
+void	set_player_color(t_player *player)
+{
+	player->color.r = 255;
+	player->color.g = 0;
+	player->color.b = 0;
 }
 
 bool	create_player(t_player *player, t_map_data *map_data)
 {
-	player->point.pos_x = 300;
-	player->point.pos_y = 300;
-	player->size = 4;
-	player->color[0] = 255;
-	player->color[1] = 255;
-	player->color[2] = 0;
-	set_player_position(player, map_data);
+	set_player_size(player, map_data);
+	set_player_color(player);
+	set_first_player_position(player, map_data);
+	set_player_orientation(player);
 	return (true);
 }
