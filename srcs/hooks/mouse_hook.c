@@ -6,7 +6,7 @@
 /*   By: jugingas <jugingas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 22:43:43 by jugingas          #+#    #+#             */
-/*   Updated: 2024/04/04 23:00:25 by jugingas         ###   ########.fr       */
+/*   Updated: 2024/04/04 23:44:04 by jugingas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,24 @@
 #include <math.h>
 #include <stdio.h>
 
-int    mouse_handler(int x, int y, t_cub3D_data *data)
+int	mouse_handler(int x, int y, t_cub3D_data *data)
 {
-    double delta_x;
+	double delta_x;
 
-    (void)y;
-    printf("mouse movement captured./n");
-    delta_x = x - (WIDTH / 2);
-    data->player.angle += delta_x * ROTATION_SPEED;
-    if (data->player.angle >= 2 * M_PI)
-        data->player.angle -= 2 * M_PI;
-    else if (data->player.angle  < 0)
-        data->player.angle += 2 * M_PI;
-    return (0);
+	(void)y;
+	printf("mouse movement captured./n");
+	mlx_string_put(data->window.mlx, data->window.address, x, y, 0, " ");
+	delta_x = x - (WIDTH / 2);
+	data->player.angle += delta_x * ROTATION_SPEED;
+	if (data->player.angle >= 2 * M_PI)
+		data->player.angle -= 2 * M_PI;
+	else if (data->player.angle  < 0)
+		data->player.angle += 2 * M_PI;
+	return (0);
 }
 
-bool    mouse_hook(t_cub3D_data *data)
+bool	mouse_hook(t_cub3D_data *data)
 {
-    mlx_hook(data->window.address, 6, 0, &mouse_handler, &data);
-    return (true);
+	mlx_hook(data->window.address, 4, 0, mouse_handler, data);
+	return (true);
 }
