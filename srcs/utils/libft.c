@@ -5,21 +5,22 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jugingas <jugingas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/13 07:19:45 by dlacuey           #+#    #+#             */
-/*   Updated: 2024/03/18 14:01:07 by dlacuey          ###   ########.fr       */
+/*   Created: 2024/04/06 13:32:54 by jugingas          #+#    #+#             */
+/*   Updated: 2024/04/08 13:31:30 by jugingas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <aio.h>
 #include "libft_and_utils.h"
+#include "player.h"
 #include <stdlib.h>
 
-int	ft_strlen(const char *s)
+int	ft_strlen(char *str)
 {
 	int	i;
 
 	i = 0;
-	while (s[i])
+	while (str[i])
 		i++;
 	return (i);
 }
